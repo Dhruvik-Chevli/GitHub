@@ -15,6 +15,7 @@ class UserInfoVC: UIViewController {
     let itemViewOne = UIView()
     let itemViewTwo = UIView()
     var itemViews: [UIView] = []
+    let dateLabel = GHBodyLabel(textAlignment: .center)
     
     
     override func viewDidLoad() {
@@ -23,8 +24,6 @@ class UserInfoVC: UIViewController {
         configureViewController()
         layoutUI()
         getUserInfo()
-        
-        //layoutUI()
         
     }
     
@@ -36,6 +35,9 @@ class UserInfoVC: UIViewController {
             case .success(let user):
                 DispatchQueue.main.async {
                     self.add(childVC: GHUserInfoHeaderVC(user: user), to: self.headerView)
+                    self.add(childVC: GHRepoItemVC(user: user), to: self.itemViewOne)
+                    self.add(childVC: GHFollowerItemVC(user: user), to: self.itemViewTwo)
+                    self.dateLabel.text = user.createdAt
                 }
             case .failure(let error):
                 print(error)
@@ -52,7 +54,7 @@ class UserInfoVC: UIViewController {
     
     
     func layoutUI() {
-        itemViews = [headerView, itemViewOne, itemViewTwo]
+        itemViews = [headerView, itemViewOne, itemViewTwo, dateLabel]
         let padding: CGFloat = 20
         for itemView in itemViews {
             view.addSubview(itemView)
@@ -62,18 +64,6 @@ class UserInfoVC: UIViewController {
                 itemView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding)
             ])
         }
-        view.addSubview(headerView)
-        view.addSubview(itemViewOne)
-        view.addSubview(itemViewTwo)
-        
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        itemViewTwo.translatesAutoresizingMaskIntoConstraints = false
-        itemViewOne.translatesAutoresizingMaskIntoConstraints = false
-        
-        itemViewTwo.backgroundColor = .systemBlue
-        itemViewOne.backgroundColor = .systemPink
-        
-        
         let itemHeight: CGFloat = 140
         
         NSLayoutConstraint.activate([
@@ -85,6 +75,9 @@ class UserInfoVC: UIViewController {
             
             itemViewTwo.topAnchor.constraint(equalTo: itemViewOne.bottomAnchor, constant: padding),
             itemViewTwo.heightAnchor.constraint(equalToConstant: itemHeight),
+            
+            dateLabel.topAnchor.constraint(equalTo: itemViewTwo.bottomAnchor, constant: padding),
+            dateLabel.heightAnchor.constraint(equalToConstant: 18)
             
         ])
     }
