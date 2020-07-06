@@ -48,7 +48,7 @@ class GHAlertVC: UIViewController {
         containerView.layer.borderWidth = 2
         containerView.layer.borderColor = UIColor.white.cgColor
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        
+        containerView.backgroundColor = .systemBackground
         NSLayoutConstraint.activate([
             containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),

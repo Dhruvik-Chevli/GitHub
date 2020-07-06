@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol FollowerListVCDelegate {
+    func didRequestFollowers(for username: String)
+}
+
 class FollowerListVC: UIViewController {
     
     enum Section { case main }
@@ -41,6 +45,8 @@ class FollowerListVC: UIViewController {
     func configureViewController() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        navigationItem.rightBarButtonItem = addButton
     }
     
     
@@ -106,6 +112,30 @@ class FollowerListVC: UIViewController {
             self.dataSource.apply(snapshot, animatingDifferences: true) }
     }
     
+    
+    @objc func addButtonTapped() {
+        
+        showLoadingView()
+        NetworkManager.shared.getUserInfo(username: username) { [weak self] result in
+            guard let self = self else { return }
+            self.dismissLoadingView()
+            switch result {
+            case .success(let user):
+                let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
+                PersistenceManager.updateWith(favorite: favorite, actionType: .add) {[weak self] error in
+                    guard let self = self else {return}
+                    guard let error = error else {
+                        self.presentGHAlertOnMainThread(title: "Success", message: "You have successfully favorited this user.🎉", buttonTitle: "Hooray!")
+                        return
+                    }
+                    self.presentGHAlertOnMainThread(title: "Something went wrong.", message: error.rawValue, buttonTitle: "Ok")
+                }
+            case .failure(let error):
+                self.presentGHAlertOnMainThread(title: "Something Went Wrong", message: error.rawValue, buttonTitle: "Ok")
+            }
+        }
+    }
+    
 }
 
 
@@ -130,6 +160,7 @@ extension FollowerListVC: UICollectionViewDelegate {
         let follower = activeArray[indexPath.row]
         let destVC = UserInfoVC()
         destVC.username = follower.login
+        destVC.delegate = self
         let navController = UINavigationController(rootViewController: destVC)
         present(navController, animated: true)
     }
@@ -152,4 +183,18 @@ extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
         isSearching = false
         updateData(on: followers)
     }
+}
+
+
+extension FollowerListVC: FollowerListVCDelegate {
+    func didRequestFollowers(for username: String) {
+        self.username = username
+        page = 1
+        title = self.username
+        followers.removeAll()
+        filteredFollowers.removeAll()
+        collectionView.setContentOffset(.zero, animated: true)
+        getFollowers(username: username, page: page)
+    }
+    
 }
