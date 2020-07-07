@@ -136,7 +136,7 @@ class FollowerListVC: GHDataLoadingVC {
             self.dismissLoadingView()
             switch result {
             case .success(let user):
-                self.addUserToFavorites(useR: user)
+                self.addUserToFavorites(user: user)
             case .failure(let error):
                 self.presentGHAlertOnMainThread(title: "Something Went Wrong", message: error.rawValue, buttonTitle: "Ok")
             }
