@@ -21,10 +21,9 @@ class GHTextField: UITextField {
     }
     
     
-    init(placeHolder: String) {
-        super.init(frame: .zero)
+    convenience init(placeHolder: String) {
+        self.init(frame: .zero)
         placeholder = placeHolder
-        configure()
     }
     
     
@@ -44,6 +43,7 @@ class GHTextField: UITextField {
         
         backgroundColor = .tertiarySystemBackground
         autocorrectionType = .no
+        clearButtonMode = .whileEditing
         returnKeyType = .go
     }
     

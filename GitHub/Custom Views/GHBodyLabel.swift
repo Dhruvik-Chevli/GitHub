@@ -21,10 +21,9 @@ class GHBodyLabel: UILabel {
     }
     
     
-    init(textAlignment: NSTextAlignment) {
-        super.init(frame: .zero)
+    convenience init(textAlignment: NSTextAlignment) {
+        self.init(frame: .zero)
         self.textAlignment = textAlignment
-        configure()
     }
     
     
@@ -33,6 +32,7 @@ class GHBodyLabel: UILabel {
         adjustsFontSizeToFitWidth = true
         minimumScaleFactor = 0.75
         font = UIFont.preferredFont(forTextStyle: .body)
+        adjustsFontForContentSizeCategory = true
         lineBreakMode = .byWordWrapping
         translatesAutoresizingMaskIntoConstraints = false
     }

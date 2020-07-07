@@ -8,11 +8,28 @@
 
 import Foundation
 
+protocol GHFollowerItemVCDelegate {
+    func didTapGetFollowers(for user: User)
+}
+
 class GHFollowerItemVC: GHItemInfoVC {
+    
+    var delegate: GHFollowerItemVCDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureItems()
+    }
+    
+    
+    init(user: User, delegate: GHFollowerItemVCDelegate) {
+        super.init(user: user)
+        self.delegate = delegate
+    }
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     

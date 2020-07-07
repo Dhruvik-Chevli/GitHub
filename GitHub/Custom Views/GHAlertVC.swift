@@ -10,7 +10,7 @@ import UIKit
 
 class GHAlertVC: UIViewController {
 
-    let containerView = UIView()
+    let containerView = GHAlertContainerView()
     let titleLabel = GHTitleLabel(textAlignment: .center, fontSize: 20)
     let messageLabel = GHBodyLabel(textAlignment: .center)
     let actionButton = GHButton(backgroundColor: .systemPink, title: "Ok")
@@ -35,7 +35,8 @@ class GHAlertVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+        view.addSubviews(containerView, titleLabel, messageLabel, actionButton)
         configureContainerView()
         configureTitleLabel()
         configureActionButton()
@@ -43,12 +44,6 @@ class GHAlertVC: UIViewController {
     }
     
     func configureContainerView() {
-        view.addSubview(containerView)
-        containerView.layer.cornerRadius = 15
-        containerView.layer.borderWidth = 2
-        containerView.layer.borderColor = UIColor.white.cgColor
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.backgroundColor = .systemBackground
         NSLayoutConstraint.activate([
             containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -58,7 +53,6 @@ class GHAlertVC: UIViewController {
     }
     
     func configureTitleLabel() {
-        containerView.addSubview(titleLabel)
         titleLabel.text = alertTitle ?? "Something went wrong!"
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: padding),
@@ -70,7 +64,6 @@ class GHAlertVC: UIViewController {
     
     
     func configureActionButton() {
-        containerView.addSubview(actionButton)
         actionButton.setTitle(buttonTitle ?? "Ok", for: .normal)
         actionButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
         
@@ -84,7 +77,6 @@ class GHAlertVC: UIViewController {
     
     
     func configureMessageLabel() {
-        containerView.addSubview(messageLabel)
         messageLabel.text = message ?? "Unable to complete request"
         messageLabel.numberOfLines = 4
         

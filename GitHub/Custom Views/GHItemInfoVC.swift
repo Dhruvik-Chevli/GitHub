@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+
 class GHItemInfoVC: UIViewController {
 
     let stackView = UIStackView()
@@ -16,7 +18,6 @@ class GHItemInfoVC: UIViewController {
     let actionButton = GHButton()
     var user: User!
     
-    var delegate: UserInfoVCDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,8 +66,7 @@ class GHItemInfoVC: UIViewController {
     
     
     private func layoutUI() {
-        view.addSubview(stackView)
-        view.addSubview(actionButton)
+        view.addSubviews(stackView, actionButton)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         let padding: CGFloat = 20
